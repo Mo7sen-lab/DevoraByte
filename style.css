@@ -121,3 +121,127 @@ main,
         max-width: 100%;
     }
 }
+
+
+/* Motion polish — subtle entrance, hover, and ambient animations. */
+@keyframes db-fade-up {
+  from { opacity: 0; transform: translate3d(0, 24px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes db-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes db-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+@keyframes db-orbit-breathe {
+  0%, 100% { opacity: .7; }
+  50%      { opacity: 1; }
+}
+@keyframes db-cursor-blink {
+  0%, 48% { opacity: 1; }
+  49%, 100% { opacity: .18; }
+}
+
+/* Only hide reveal elements when JavaScript is available. */
+.js-motion .reveal-on-scroll {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.js-motion .reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.hero-copy { animation: db-fade-up .8s cubic-bezier(.2,.7,.2,1) both; }
+.hero-visual { animation: db-fade-in 1s ease .12s both; }
+.code-window { animation: db-fade-up .9s cubic-bezier(.2,.7,.2,1) .15s both; }
+.floating-card { animation: db-float 5s ease-in-out infinite; }
+.card-spark { animation-delay: -2.2s; }
+.visual-glow { animation: db-orbit-breathe 5s ease-in-out infinite; }
+.visual-orbit { animation: db-orbit-breathe 7s ease-in-out infinite; }
+.code-cursor { animation: db-cursor-blink 1.15s steps(1, end) infinite; }
+.ambient-one { animation: db-float 12s ease-in-out infinite; }
+.ambient-two { animation: db-float 15s ease-in-out -4s infinite; }
+.service-card, .price-card, .why-card, .process-grid article {
+  transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+.service-card:hover, .price-card:hover, .why-card:hover, .process-grid article:hover {
+  box-shadow: 0 18px 42px rgba(35, 89, 210, .12);
+}
+.project-image .mock-browser, .project-image .shop-ui, .project-image .app-ui {
+  transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.project-image:hover .mock-browser { transform: rotate(-1deg) translateY(-5px) scale(1.015); }
+.project-image:hover .shop-ui, .project-image:hover .app-ui { transform: translateY(-5px) scale(1.015); }
+.button-primary { background-size: 160% 160%; transition: transform .2s, box-shadow .25s, background-position .45s; }
+.button-primary:hover { background-position: 100% 50%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js-motion .reveal-on-scroll,
+  .js-motion .reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .hero-copy, .hero-visual, .code-window, .floating-card, .visual-glow,
+  .visual-orbit, .code-cursor, .ambient-one, .ambient-two {
+    animation: none !important;
+  }
+}
+
+
+
+/* Extra premium motion layer */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; width: 0%; height: 3px; z-index: 9999;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #22d3ee, #3b82f6);
+  background-size: 220% 100%; box-shadow: 0 0 14px rgba(90, 115, 255, .55);
+  animation: db-gradient-flow 5s linear infinite; pointer-events: none;
+}
+@keyframes db-gradient-flow { to { background-position: 220% 0; } }
+@keyframes db-heading-shimmer { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes db-icon-bob { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(3deg); } }
+@keyframes db-ring-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(89, 135, 255, .12); } 50% { box-shadow: 0 0 0 9px rgba(89, 135, 255, 0); } }
+@keyframes db-shine { 0% { transform: translateX(-130%) skewX(-18deg); } 55%, 100% { transform: translateX(230%) skewX(-18deg); } }
+
+.section-heading h2 {
+  background-image: linear-gradient(105deg, var(--text, #f4f7ff) 0%, #b8c8ff 35%, #8bdcff 52%, #c4a7ff 68%, var(--text, #f4f7ff) 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  animation: db-heading-shimmer 9s ease-in-out infinite;
+}
+.service-icon, .why-card > span, .security-icon { animation: db-icon-bob 4.8s ease-in-out infinite; }
+.service-card:nth-child(2) .service-icon, .why-card:nth-child(2) > span { animation-delay: -.9s; }
+.service-card:nth-child(3) .service-icon, .why-card:nth-child(3) > span { animation-delay: -1.8s; }
+.security-icon { animation: db-ring-pulse 3.5s ease-in-out infinite; }
+
+/* Cards react gently to pointer position, without affecting document flow. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .service-card, .price-card, .why-card, .project-card {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transition: transform .22s ease, border-color .28s ease, box-shadow .28s ease;
+  }
+  .service-card:hover, .price-card:hover, .why-card:hover, .project-card:hover {
+    transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-5px);
+  }
+  .button-primary, .button-ghost { position: relative; overflow: hidden; }
+  .button-primary::after, .button-ghost::after {
+    content: ""; position: absolute; inset: -30% auto -30% -45%; width: 28%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+    transform: translateX(-130%) skewX(-18deg); pointer-events: none;
+  }
+  .button-primary:hover::after, .button-ghost:hover::after { animation: db-shine .85s ease; }
+}
+
+/* Clear keyboard focus and keep motion comfortable for everyone. */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid #75baff; outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress, .section-heading h2, .service-icon, .why-card > span, .security-icon { animation: none !important; }
+  .service-card, .price-card, .why-card, .project-card { transform: none !important; transition: none !important; }
+}
