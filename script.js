@@ -1,3 +1,6 @@
+// DevoraByte motion effects: subtle, accessible animations.
+document.documentElement.classList.add("js-motion");
+
 const menuToggle = document.querySelector(".menu-toggle");
 const navLinks = document.querySelector(".nav-links");
 
@@ -121,3 +124,100 @@ document.querySelectorAll("[data-service]").forEach((link) => {
 });
 
 document.querySelector("#year").textContent = new Date().getFullYear();
+
+
+// Scroll reveal: elements fade and rise into view as the visitor scrolls.
+const revealSelectors = [
+  ".section-heading",
+  ".service-card",
+  ".price-card",
+  ".project-card",
+  ".about-visual",
+  ".about-copy",
+  ".why-card",
+  ".security-panel",
+  ".process-grid article",
+  ".contact-copy",
+  ".contact-form",
+  ".trust-inner > *"
+];
+
+const revealElements = document.querySelectorAll(revealSelectors.join(","));
+
+if ("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  revealElements.forEach((element, index) => {
+    element.classList.add("reveal-on-scroll");
+    if (element.matches(".service-card, .price-card, .process-grid article, .trust-inner > *")) {
+      element.style.setProperty("--reveal-delay", `${(index % 4) * 90}ms`);
+    }
+
+    // Hero content should be visible immediately; reveal the other sections on scroll.
+    if (element.closest(".hero")) {
+      element.classList.remove("reveal-on-scroll");
+      return;
+    }
+  });
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
+
+  revealElements.forEach((element) => {
+    if (element.classList.contains("reveal-on-scroll")) revealObserver.observe(element);
+  });
+} else {
+  revealElements.forEach((element) => element.classList.add("is-visible"));
+}
+
+
+// Extra premium motion: reading progress, pointer glow, and gentle card tilt.
+const progressBar = document.createElement("div");
+progressBar.className = "scroll-progress";
+progressBar.setAttribute("aria-hidden", "true");
+document.body.prepend(progressBar);
+let progressTicking = false;
+function updateScrollProgress() {
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+  progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+  progressTicking = false;
+}
+window.addEventListener("scroll", () => {
+  if (!progressTicking) {
+    window.requestAnimationFrame(updateScrollProgress);
+    progressTicking = true;
+  }
+}, { passive: true });
+updateScrollProgress();
+
+// Soft pointer-follow glow on desktop; no movement on touch or reduced-motion devices.
+const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (canHover && !reduceMotion) {
+  document.body.classList.add("pointer-motion");
+  window.addEventListener("pointermove", (event) => {
+    document.documentElement.style.setProperty("--pointer-x", `${event.clientX}px`);
+    document.documentElement.style.setProperty("--pointer-y", `${event.clientY}px`);
+  }, { passive: true });
+
+  document.querySelectorAll(".service-card, .price-card, .why-card, .project-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      card.style.setProperty("--tilt-x", `${(0.5 - y) * 3}deg`);
+      card.style.setProperty("--tilt-y", `${(x - 0.5) * 3}deg`);
+      card.style.setProperty("--shine-x", `${x * 100}%`);
+      card.style.setProperty("--shine-y", `${y * 100}%`);
+    });
+    card.addEventListener("pointerleave", () => {
+      card.style.setProperty("--tilt-x", "0deg");
+      card.style.setProperty("--tilt-y", "0deg");
+    });
+  });
+}
