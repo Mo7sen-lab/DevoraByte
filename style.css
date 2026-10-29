@@ -82,3 +82,40 @@ body.light-theme{--bg:#f5f7ff;--bg-soft:#edf1fc;--panel:#fff;--panel-2:#eef2ff;-
 .light-theme .theme-toggle{background:rgba(35,55,100,.06)}
 @media(max-width:980px){.pricing-grid{gap:12px}.price-card{padding:24px 18px}.price-badge{position:static;align-self:flex-start;margin-bottom:10px}}
 @media(max-width:760px){.theme-toggle{margin-left:auto;margin-right:8px}.nav-links{order:3}.pricing-section{padding-top:15px}.pricing-grid{grid-template-columns:1fr}.price-card{min-height:0;padding:25px}.price-summary{min-height:0}.social-row{justify-content:flex-start;flex-wrap:wrap;gap:15px;padding-bottom:17px}.footer-main .footer-links{flex-wrap:wrap}}
+@media (max-width: 760px) {
+    .container {
+        width: calc(100% - 28px);
+        max-width: 560px;
+        margin-inline: auto;
+    }
+
+    .hero,
+    .about-section,
+    .contact-panel {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .hero > *,
+    .about-section > *,
+    .contact-panel > * {
+        min-width: 0;
+    }
+
+    .hero h1 {
+        overflow-wrap: break-word;
+    }
+
+    .hero-visual {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .code-window {
+        max-width: 100%;
+    }
+
+    .trust-inner {
+        width: 100%;
+    }
+}
