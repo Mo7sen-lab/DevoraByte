@@ -38,7 +38,7 @@ filterButtons.forEach((button) => {
 // IMPORTANT: replace these placeholders with your real business details before publishing.
 const CONTACT_EMAIL = "hello@devorabyte.com";
 const SOCIAL_PROFILES = {
-  instagram: "https://instagram.com/YOUR_USERNAME",
+  instagram: "https://www.instagram.com/devorabyte?srtk=OTV0YTQ4MnNnbTBv",
   linkedin: "https://linkedin.com/in/YOUR_PROFILE",
   github: "https://github.com/YOUR_USERNAME",
   whatsapp: "https://wa.me/201020904097"
